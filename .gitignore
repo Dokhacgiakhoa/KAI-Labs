@@ -1,15 +1,38 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-venv/
-.env
-
-# Node
-node_modules/
-build/
+# General
 .DS_Store
-
-# IDE
 .vscode/
 .idea/
+*.log
+
+# Backend (Python)
+backend/__pycache__/
+backend/*.py[cod]
+backend/*$py.class
+backend/venv/
+backend/.env
+backend/.pytest_cache/
+backend/*.db
+backend/*.sqlite3
+backend/static/uploads/*
+!backend/static/uploads/.gitkeep
+!backend/static/uploads/Vnonymus.jpg
+
+# Frontend (Node)
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# Root
+.env
+venv/
+__pycache__/
+*.py[cod]
+node_modules/
