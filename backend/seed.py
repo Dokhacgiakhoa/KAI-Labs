@@ -46,15 +46,17 @@ def seed_database():
             print("Agent Vnonymus already exists.")
 
         # 2. Seed Admin User
-        if not User.query.filter_by(username="admin").first():
+        admin = User.query.filter_by(username="admin").first()
+        if not admin:
             print("Seeding Admin user...")
             admin = User(username="admin", role="admin")
-            admin.set_password("admin123")
             db.session.add(admin)
-            db.session.commit()
-            print("Admin user seeded.")
-        else:
-            print("Admin user already exists.")
+        
+        # Always update password to ensure it's hashed and correct
+        # This fixes the issue where old plaintext passwords persist
+        admin.set_password("admin123")
+        db.session.commit()
+        print("Admin user seeded/updated.")
             
         print("Seeding complete check!")
 
