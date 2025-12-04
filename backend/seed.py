@@ -17,38 +17,45 @@ def seed_database():
         print("Creating tables...")
         db.create_all()
 
-        # Check if Vnonymus exists
-        if Agent.query.filter_by(codename="Vnonymus").first():
-            print("Database already seeded.")
-            return
+    with app.app_context():
+        print("Creating tables...")
+        db.create_all()
 
-        print("Seeding Vnonymus agent...")
-        
-        # Create Agent
-        vnonymus = Agent(
-            codename="Vnonymus",
-            name="Vnonymus", # Using codename as name for now based on current UI
-            role="Full Stack Developer",
-            rank="F INTERN", # Initial rank, will be recalculated
-            avatar="/images/Vnonymus.jpg",
-            birth_date=PROFILE_DATA["birthDate"]
-        )
-        db.session.add(vnonymus)
-        db.session.commit()
+        # 1. Seed Agent (Vnonymus)
+        if not Agent.query.filter_by(codename="Vnonymus").first():
+            print("Seeding Vnonymus agent...")
+            vnonymus = Agent(
+                codename="Vnonymus",
+                name="Vnonymus",
+                role="Full Stack Developer",
+                rank="F INTERN",
+                avatar="/images/Vnonymus.jpg",
+                birth_date=PROFILE_DATA["birthDate"]
+            )
+            db.session.add(vnonymus)
+            db.session.commit() # Commit to get ID
 
-        # Create Agent Data
-        agent_data = AgentData(agent_id=vnonymus.id)
-        agent_data.set_history(PROFILE_DATA["history"])
-        agent_data.set_achievements(PROFILE_DATA["achievements"])
-        
-        db.session.add(agent_data)
-        
-        # Create Admin User
-        admin = User(username="admin", password_hash="admin123", role="admin") # In real app, hash this!
-        db.session.add(admin)
-        
-        db.session.commit()
-        print("Seeding complete!")
+            # Create Agent Data
+            agent_data = AgentData(agent_id=vnonymus.id)
+            agent_data.set_history(PROFILE_DATA["history"])
+            agent_data.set_achievements(PROFILE_DATA["achievements"])
+            db.session.add(agent_data)
+            db.session.commit()
+            print("Agent seeded.")
+        else:
+            print("Agent Vnonymus already exists.")
+
+        # 2. Seed Admin User
+        if not User.query.filter_by(username="admin").first():
+            print("Seeding Admin user...")
+            admin = User(username="admin", password_hash="admin123", role="admin")
+            db.session.add(admin)
+            db.session.commit()
+            print("Admin user seeded.")
+        else:
+            print("Admin user already exists.")
+            
+        print("Seeding complete check!")
 
 if __name__ == "__main__":
     seed_database()
