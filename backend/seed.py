@@ -1,4 +1,3 @@
-import pyodbc
 from app import app
 from models import db, User, Agent, AgentData
 from data import PROFILE_DATA
@@ -6,32 +5,10 @@ import json
 import os
 
 def create_database_if_not_exists():
-    # Parse connection string to get server
-    # Assuming standard format from .env
-    conn_str = os.getenv('DATABASE_URL')
-    if 'mssql+pyodbc://' in conn_str:
-        # Extract server from connection string or use localhost default
-        server = 'localhost\\SQLEXPRESS' 
-        driver = '{ODBC Driver 17 for SQL Server}'
-        
-        # Connect to master
-        master_conn_str = f"DRIVER={driver};SERVER={server};DATABASE=master;Trusted_Connection=yes;AutoCommit=True;"
-        try:
-            cnxn = pyodbc.connect(master_conn_str, autocommit=True)
-            cursor = cnxn.cursor()
-            
-            # Check if DB exists
-            cursor.execute("SELECT name FROM master.dbo.sysdatabases WHERE name = N'KaiLabs'")
-            if not cursor.fetchone():
-                print("Database 'KaiLabs' not found. Creating...")
-                cursor.execute("CREATE DATABASE KaiLabs")
-                print("Database created.")
-            else:
-                print("Database 'KaiLabs' already exists.")
-            
-            cnxn.close()
-        except Exception as e:
-            print(f"Error checking/creating database: {e}")
+    # For PostgreSQL (Neon), the database is already created.
+    # We only need this for local SQL Server development if needed, 
+    # but for now we rely on SQLAlchemy to create tables.
+    pass
 
 def seed_database():
     create_database_if_not_exists()
