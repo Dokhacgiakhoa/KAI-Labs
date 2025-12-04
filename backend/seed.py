@@ -48,7 +48,8 @@ def seed_database():
         # 2. Seed Admin User
         if not User.query.filter_by(username="admin").first():
             print("Seeding Admin user...")
-            admin = User(username="admin", password_hash="admin123", role="admin")
+            admin = User(username="admin", role="admin")
+            admin.set_password("admin123")
             db.session.add(admin)
             db.session.commit()
             print("Admin user seeded.")

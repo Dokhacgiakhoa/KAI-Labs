@@ -119,7 +119,7 @@ def login():
     # Admin user seeded in seed.py: admin / admin123
     user = User.query.filter_by(username=username).first()
     
-    if user and user.password_hash == password: # Plaintext for demo, hash in prod!
+    if user and user.check_password(password):
         return jsonify({
             "message": "Login successful",
             "token": "fake-jwt-token-for-demo", # In prod use flask-jwt-extended
